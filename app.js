@@ -2,7 +2,6 @@ const express = require('express')
 const {Canvas} = require('canvas-constructor')
 const fs = require('fs')
 const request = require('request')
-const { Webhook } = require('discord-webhook-node');
 const app = express()
 const port = 3003
 const fade = fs.readFileSync('assets/images/template-fade.png')
@@ -18,11 +17,11 @@ function download(uri, filename, callback) {
 }
 
 app.post('/convert', async function (req, res) {
-    const canvas = new Canvas(1920, 720)
+    const canvas = new Canvas(900, 400) // 1920   -  720
     if (req.body.uri.includes('youtube.com')) {
         download(getYoutubeThumbnailUri(req.body.identifier), 'file.png', function () {
-            canvas.addImage(fs.readFileSync('file.png'), 600, -125, 1300, 965,)
-                .addImage(fade, 0, 0, 1800, 720)
+            canvas.addImage(fs.readFileSync('file.png'), 190, -100, 710, 600,)
+                .addImage(fade, 0, 0, 500, 400)
                 .setColor('white')
                 .setTextSize(35)
                 .addText('Added to the queue', 10, 45)
@@ -32,9 +31,8 @@ app.post('/convert', async function (req, res) {
                 .addText('Length: ' + calcLength(req.body.duration), 10, 650)
                 .addText('Requested by ' + req.body.author, 10, 700, 450)
             fs.writeFileSync('out.png', canvas.toBuffer())
-            let hook = new Webhook(req.body.webhook);
-            hook.setUsername("Apollo Image Test")
-            hook.sendFile('out.png')
+            res.type('png')
+            res.send(canvas.toBuffer())
             try {
                 fs.unlinkSync('file.png')
                 fs.unlinkSync('out.png')
