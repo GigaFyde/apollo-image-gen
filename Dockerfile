@@ -1,9 +1,5 @@
-FROM node:14.15.0-buster-slim
+FROM gigafyde/image-gen-baseimage
 WORKDIR /app
-
-RUN apt update -y
-RUN apt install fontconfig -y
-RUN fc-cache -fv
 
 COPY package.json package.json
 COPY package-lock.json package-lock.json
