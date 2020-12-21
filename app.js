@@ -27,7 +27,7 @@ app.post('/convert', async function (req, res) {
                 .addText('Added to the queue', 10, 45)
                 .setTextSize(22)
                 .addWrappedText(req.body.title, 10, 120, 580)
-                .setTextSize(15)
+                .setTextSize(20)
                 .addText('Length: ' + calcLength(req.body.duration), 10, 350)
                 .addText('Requested by ' + req.body.author, 10, 380, 350)
             fs.writeFileSync('out.png', canvas.toBuffer())
