@@ -6,7 +6,7 @@ steps:
   - name: build-notify
     image: appleboy/drone-discord
     settings:
-      message: "ℹ️ Build #{{build.number}} of `{{repo.name}}` started"
+      message: "ℹ️ Build #{{build.number}} of `{{repo.name}}` on branch: ``{{build.branch}}` started"
       webhook_id:
         from_secret: webhook_id
       webhook_token:
