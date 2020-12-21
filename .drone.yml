@@ -13,30 +13,30 @@ steps:
         from_secret: webhook_token
 
   - name: docker-build
-      image: plugins/docker
-      settings:
-        repo: gigafyde/image-gen
-        username: gigafyde
-        password:
-          from_secret: docker_token
-        tags: latest
-        force_tag: true
+    image: plugins/docker
+    settings:
+      repo: gigafyde/image-gen
+      username: gigafyde
+      password:
+        from_secret: docker_token
+      tags: latest
+      force_tag: true
     when:
       branch:
         - master
 
   - name: dev-docker-build
-      image: plugins/docker
-      settings:
-        repo: gigafyde/image-gen
-        username: gigafyde
-        password:
-          from_secret: docker_token
-        tags: dev
-        force_tag: true
-      when:
-        branch:
-          - dev
+    image: plugins/docker
+    settings:
+      repo: gigafyde/image-gen
+      username: gigafyde
+      password:
+        from_secret: docker_token
+      tags: dev
+      force_tag: true
+    when:
+      branch:
+        - dev
 
   - name: discord-notify
     image: appleboy/drone-discord
