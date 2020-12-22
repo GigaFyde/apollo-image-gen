@@ -5,6 +5,7 @@ const request = require('request')
 const app = express()
 const port = 3003
 const fade = fs.readFileSync('assets/images/template-fade.png')
+const vertfade = fs.readFileSync('assets/images/template-fade-vertical.png')
 const bg = fs.readFileSync('assets/images/template.png')
 const progFade = fs.readFileSync('assets/images/fade.png')
 
@@ -19,22 +20,22 @@ function download(uri, filename, callback) {
 app.post('/convert', async function (req, res) {
     const canvas = new Canvas(900, 400) // 1920   -  720
     if (req.body.uri.includes('youtube.com')) {
-        download(getYoutubeThumbnailUri(req.body.identifier), 'file.png', function () {
-            canvas.addImage(fs.readFileSync('file.png'), 190, -100, 710, 600,)
+        download(getYoutubeThumbnailUri(req.body.identifier), 'thumbnail.png', function () {
+            canvas
+                .addImage(fs.readFileSync('thumbnail.png'), 190, -100, 710, 600,)
+                .addImage(vertfade, 0, 0, 900, 150)
                 .addImage(fade, 0, 0, 500, 400)
                 .setColor('white')
-                .setTextSize(35)
-                .addText('Added to the queue', 10, 45)
-                .setTextSize(22)
-                .addWrappedText(req.body.title, 10, 120, 580)
+                .setTextSize(32)
+                .addWrappedText(req.body.title, 6, 30, 880)
                 .setTextSize(20)
-                .addText('Length: ' + calcLength(req.body.duration), 10, 350)
-                .addText('Requested by ' + req.body.author, 10, 380, 350)
+                .addText('Length: ' + calcLength(req.body.duration), 10, 365)
+                .addText('Added by ' + req.body.author, 10, 390, 350)
             fs.writeFileSync('out.png', canvas.toBuffer())
             res.type('png')
             res.send(canvas.toBuffer())
             try {
-                fs.unlinkSync('file.png')
+                fs.unlinkSync('thumbnail.png')
                 fs.unlinkSync('out.png')
             } catch (err) {
                 console.error('failed to remove file' + err)
